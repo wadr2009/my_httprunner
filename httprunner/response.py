@@ -145,6 +145,9 @@ class ResponseObjectBase(object):
             if "$" in field:
                 # field contains variable or function
                 field = self.parser.parse_data(field, variables_mapping)
+            if "$" in key:
+                # key contains variable or function
+                key = self.parser.parse_data(key, variables_mapping)
             field_value = self._search_jmespath(field)
             extract_mapping[key] = field_value
 
