@@ -224,7 +224,14 @@ class SessionRunner(object):
             f"Start to run testcase: {self.__config.name}, TestCase ID: {self.case_id}"
         )
 
-        logger.add(self.__log_path, format=LOGGER_FORMAT, level="DEBUG")
+        try:
+            func = self.parser.functions_mapping.get('ENV')
+            log_level = func('LOG_LEVEL')
+        except Exception as ex:
+            log_level = 'DEBUG'
+            logger.error(".env 中 LOG_LEVEL 不存在")
+            
+        logger.add(self.__log_path, format=LOGGER_FORMAT, level=log_level)
         self.__start_at = time.time()
         try:
             # run step in sequential order
