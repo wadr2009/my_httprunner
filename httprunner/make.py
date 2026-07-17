@@ -277,6 +277,8 @@ def make_request_chain_style(request: Dict) -> Text:
 def make_teststep_chain_style(teststep: Dict) -> Text:
     if teststep.get("request"):
         step_info = f'RunRequest("{teststep["name"]}")'
+    elif teststep.get("sql_request"):
+        step_info = f'RunSqlRequest("{teststep["name"]}")'
     elif teststep.get("testcase"):
         step_info = f'RunTestCase("{teststep["name"]}")'
     else:
@@ -299,6 +301,13 @@ def make_teststep_chain_style(teststep: Dict) -> Text:
 
     if teststep.get("request"):
         step_info += make_request_chain_style(teststep["request"])
+    elif teststep.get("sql_request"):
+        sql_req = teststep["sql_request"]
+        method = sql_req.get("method", "FETCHONE").lower()
+        sql = sql_req.get("sql", "")
+        step_info += f'.{method}("{sql}")'
+        if "size" in sql_req:
+            step_info += f', {sql_req["size"]}'
     elif teststep.get("testcase"):
         testcase = teststep["testcase"]
         call_ref_testcase = f".call({testcase})"

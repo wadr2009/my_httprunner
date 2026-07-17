@@ -225,6 +225,9 @@ def ensure_testcase_v4(test_content: Dict) -> Dict:
 
         if "request" in step:
             pass
+        elif "sql_request" in step:
+            # SQL request, pass through
+            pass
         elif "api" in step:
             teststep["testcase"] = step.pop("api")
         elif "testcase" in step:
